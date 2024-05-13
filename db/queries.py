@@ -1,5 +1,4 @@
 from db import connection_postgreSQL
-import json
 
 connection = connection_postgreSQL.connection
 

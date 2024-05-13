@@ -2,6 +2,7 @@ import bcrypt
 import jwt
 import os
 from dotenv import load_dotenv
+from flask import jsonify, request
 
 load_dotenv()
 secret = os.getenv("SECRET", "secret")
@@ -29,3 +30,19 @@ def encodedJWT(payload):
 def decodedJWT(Token):
     decodedJWT = jwt.decode(Token, secret, algorithms=["HS256"])
     return decodedJWT
+
+
+def TokenBusiness():
+    token = request.cookies.get("token")
+    if not token:
+        return {"message": "Please Login", "Status": False}
+
+    tokenRES = decodedJWT(token)
+
+    if not tokenRES:
+        return {"message": "Please Login", "Status": False}
+
+    if not "rol" in tokenRES:
+        return {"message": "You aren't a business", "Status": False}
+
+    return {"Business": tokenRES, "Status": True}

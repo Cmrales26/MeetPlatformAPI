@@ -46,3 +46,16 @@ def TokenBusiness():
         return {"message": "You aren't a business", "Status": False}
 
     return {"Business": tokenRES, "Status": True}
+
+
+def TokenUser():
+    token = request.cookies.get("token")
+    if not token:
+        return {"message": "Please Login", "Status": False}
+
+    tokenRES = decodedJWT(token)
+
+    if not tokenRES:
+        return {"message": "Please Login", "Status": False}
+
+    return {"User": tokenRES, "Status": True}

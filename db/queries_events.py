@@ -2,7 +2,6 @@ from db import connection_postgreSQL
 
 connection = connection_postgreSQL.connection
 
-
 # Business
 
 

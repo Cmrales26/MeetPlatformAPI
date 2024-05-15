@@ -17,11 +17,6 @@ def createAccountRoute():
     return normalUser_controller.CreateAccount(data)
 
 
-@user_routes.route("/logout", methods=["GET"])
-def logoutRoute():
-    return user_controller.LogOut()
-
-
 @user_routes.route("/edit/user/<UserID>", methods=["PATCH"])
 def editUserRoute(UserID):
     id = UserID
@@ -36,3 +31,15 @@ def disableUserRoute(UserID):
 
 
 # TODO: ENABLE USER
+
+
+# AUTH
+@user_routes.route("/logout", methods=["GET"])
+def logoutRoute():
+    return user_controller.LogOut()
+
+
+@user_routes.route("/checkLogin", methods=["POST"])
+def checkLoginRoute():
+    token = request.json
+    return user_controller.CheckLogin(token)

@@ -29,8 +29,6 @@ def Get_Events():
         events = cursor.fetchall()
 
         event_list = []
-        print(events)
-
         if len(events) == 0:
             return event_list
 

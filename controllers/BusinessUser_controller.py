@@ -58,7 +58,7 @@ def login(data):
         resp.set_cookie("token", token)
         return resp
     else:
-        return jsonify({"message": "Error"}), 401
+        return jsonify({"message": "Business Not Found"}), 401
 
 
 def updateBusiness(id, data):

@@ -28,8 +28,13 @@ def encodedJWT(payload):
 
 
 def decodedJWT(Token):
-    decodedJWT = jwt.decode(Token, secret, algorithms=["HS256"])
-    return decodedJWT
+    try:
+        decodedJWT = jwt.decode(Token, secret, algorithms=["HS256"])
+        return decodedJWT
+    except jwt.ExpiredSignatureError:
+        return False
+    except jwt.InvalidTokenError:
+        return False
 
 
 def TokenBusiness():
@@ -48,8 +53,7 @@ def TokenBusiness():
     return {"Business": tokenRES, "Status": True}
 
 
-def TokenUser():
-    token = request.cookies.get("token")
+def TokenUser(token):
     if not token:
         return {"message": "Please Login", "Status": False}
 

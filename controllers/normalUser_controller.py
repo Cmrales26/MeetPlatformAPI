@@ -44,17 +44,14 @@ def LoginUser(data):
 
     user_found = queries.CheckNormalUser(data["email"])
 
-    # NOTE: if user not found
     if not user_found:
         return jsonify({"message": "User not found"}), 404
 
     if user_found == "Disable":
         return jsonify({"message": "User Disabled"}), 401
 
-    # NOTE: if user found -> Check Pass
     check_pass = lib.decryptPass(data["password"], user_found["Password"])
 
-    # NOTE: if user found and check pass true then
     if check_pass:
         payload = user_found
         payload.pop("Password", None)
@@ -62,7 +59,10 @@ def LoginUser(data):
         payload["token"] = token
         resp = make_response(jsonify(payload))
         resp.set_cookie("token", token)
+        print("Cree la cookie")
         return resp
+    else:
+        return jsonify({"message": "User Not found"}), 401
 
 
 def UpdateUser(id, data):

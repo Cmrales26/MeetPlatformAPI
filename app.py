@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from routes.user_routes import user_routes
 from routes.business_routes import business_routes
 from routes.event_routes import event_routes
@@ -10,6 +11,8 @@ import os
 load_dotenv(".env")
 
 app = Flask(__name__)
+
+CORS(app)
 
 app.register_blueprint(user_routes, url_prefix="/api")
 app.register_blueprint(business_routes, url_prefix="/api")

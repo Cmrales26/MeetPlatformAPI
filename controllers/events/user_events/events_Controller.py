@@ -4,20 +4,35 @@ from lib import lib
 import uuid
 
 
+# 🟢
 def get_events():
-    TokenRes = lib.TokenUser()
+    auth_header = request.headers.get("Authorization")
+
+    if not auth_header:
+        return jsonify({"message": "Missing authorization header"}), 401
+
+    token = auth_header.split()[1]
+
+    TokenRes = lib.TokenUser(token)
     if not TokenRes["Status"]:
         return jsonify({"message": TokenRes["message"]}), 401
 
     Events = queries_events_users.Get_Events()
     if len(Events) == 0:
         return jsonify({"message": "No events"}), 404
-
     return Events
 
 
+# 🟢
 def get_event(id):
-    TokenRes = lib.TokenUser()
+    auth_header = request.headers.get("Authorization")
+
+    if not auth_header:
+        return jsonify({"message": "Missing authorization header"}), 401
+
+    token = auth_header.split()[1]
+
+    TokenRes = lib.TokenUser(token)
     if not TokenRes["Status"]:
         return jsonify({"message": TokenRes["message"]}), 401
 
@@ -28,7 +43,6 @@ def get_event(id):
 
     userID = TokenRes["User"]["UserID"]
     Check_user_in_event = queries_events_users.Check_user_in_event(userID, id)
-    print(Check_user_in_event)
     if not Check_user_in_event:
         Event[0]["UserInEvent"] = False
     else:
@@ -37,12 +51,20 @@ def get_event(id):
     return Event
 
 
+# 🟢
 def JoinEvent(EventId):
-    TokenRes = lib.TokenUser()
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        return jsonify({"message": "Missing authorization header"}), 401
+
+    token = auth_header.split()[1]
+
+    TokenRes = lib.TokenUser(token)
     if not TokenRes["Status"]:
         return jsonify({"message": TokenRes["message"]}), 401
 
     eventExists = queries_events_users.Get_Event(EventId["EventID"])
+
     if len(eventExists) == 0:
         return jsonify({"message": "Event not found"}), 404
 
@@ -57,13 +79,23 @@ def JoinEvent(EventId):
     return jsonify({"message": "User joined"}), 200
 
 
+# 🟢
 def LeaveEvent(EventId):
-    TokenRes = lib.TokenUser()
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        return jsonify({"message": "Missing authorization header"}), 401
+
+    token = auth_header.split()[1]
+
+    TokenRes = lib.TokenUser(token)
     if not TokenRes["Status"]:
         return jsonify({"message": TokenRes["message"]}), 401
+
     eventExists = queries_events_users.Get_Event(EventId["EventID"])
+
     if len(eventExists) == 0:
         return jsonify({"message": "Event not found"}), 404
+
     userID = TokenRes["User"]["UserID"]
     EventID = EventId["EventID"]
 

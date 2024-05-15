@@ -81,6 +81,36 @@ def Get_Event(EventId):
         return False
 
 
+def get_my_event(UserID):
+    try:
+        cursor = connection.cursor()
+
+        cursor.execute(
+            'SELECT public.user_event.*, public.event.*, public.business."Name" FROM public.user_event JOIN public.event ON public.user_event."_EventID" = public.event."EventID" JOIN public.business ON public.event."_BusinessID" = public.business."BusinessID" WHERE public.user_event."_UserID" = %s',
+            (UserID,),
+        )
+        events = cursor.fetchall()
+        event_list = []
+        if len(events) == 0:
+            return event_list
+
+        for event in events:
+            event_dict = {
+                "id": event[3],
+                "name": event[4],
+                "description": event[5],
+                "businessID": event[6],
+                "date": event[7].isoformat(),
+                "time": event[8].isoformat(),
+                "location": event[9],
+                "business_name": event[10],
+            }
+            event_list.append(event_dict)
+        return event_list
+    except Exception as ex:
+        print(ex)
+
+
 def JoinEvent(UserID, eventID):
     try:
         cursor = connection.cursor()

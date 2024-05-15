@@ -90,15 +90,3 @@ def DisableBusiness(id):
         return jsonify({"message": "Error"}), 400
 
     return jsonify({"message": "Business disable successfully"}), 200
-
-
-def CreateEvent():
-    return jsonify({"message": "Create Event"})
-
-
-def editEvent():
-    return jsonify({"message": "Edit Event"})
-
-
-def deleteEvent():
-    return jsonify({"message": "Delete Event"})

@@ -37,6 +37,7 @@ def CreateAccount(data):
         return jsonify({"message": "added"}), 201
 
 
+# 🟢
 def LoginUser(data):
     required_fields = ["email", "password"]
     if not all(data.get(field, "").strip() for field in required_fields):
@@ -59,7 +60,6 @@ def LoginUser(data):
         payload["token"] = token
         resp = make_response(jsonify(payload))
         resp.set_cookie("token", token)
-        print("Cree la cookie")
         return resp
     else:
         return jsonify({"message": "User Not found"}), 401
@@ -100,11 +100,3 @@ def DisableUser(id):
         return jsonify({"message": "Error"}), 400
 
     return jsonify({"message": "user disable successfully"}), 200
-
-
-def JointEvent():
-    return jsonify({"message": "JointEvent"}), 202
-
-
-def QuitEvent():
-    return jsonify({"message": "QuitEvent"}), 202

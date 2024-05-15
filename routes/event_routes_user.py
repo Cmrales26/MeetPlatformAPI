@@ -24,3 +24,8 @@ def JoinEvent():
 def LeaveEvent():
     data = request.json
     return events_Controller.LeaveEvent(data)
+
+
+@User_events_routes.route("/get/MyEvent", methods=["GET"])
+def getMyEvents():
+    return events_Controller.getMyEvents()

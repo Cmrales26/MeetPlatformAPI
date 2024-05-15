@@ -110,3 +110,25 @@ def LeaveEvent(EventId):
         return jsonify({"message": "Error"}), 400
 
     return jsonify({"message": "User left"}), 200
+
+
+# 🟢
+def getMyEvents():
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        return (jsonify({"message": "Missing authorization header"}),)
+
+    token = auth_header.split()[1]
+    TokenRes = lib.TokenUser(token)
+
+    if not TokenRes["Status"]:
+        return jsonify({"message": TokenRes["message"]}), 401
+
+    userID = TokenRes["User"]["UserID"]
+
+    MyEvents = queries_events_users.get_my_event(userID)
+
+    if len(MyEvents) == 0:
+        return jsonify({"message": "No events"}), 204
+
+    return MyEvents

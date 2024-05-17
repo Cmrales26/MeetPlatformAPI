@@ -4,6 +4,7 @@ from lib import lib
 import uuid
 
 
+# 🟢
 def CreateAccount(data):
     required_fields = [
         "name",
@@ -32,7 +33,7 @@ def CreateAccount(data):
     createRes = queries.CreateNormalUser(newUser)
 
     if createRes == False:
-        return jsonify({"message": "Error"}), 400
+        return jsonify({"message": "This Email is already Register"}), 400
     else:
         return jsonify({"message": "added"}), 201
 

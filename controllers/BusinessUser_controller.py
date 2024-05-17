@@ -4,12 +4,12 @@ from lib import lib
 import uuid
 
 
-# NOTE: if there is a request value call is Business the changes below will be added into the business table, otherwise it will be change in user table;
+# 🟢
 def CreateAccount(data):
     required_fields = ["name", "bio", "fundationdate", "password"]
 
     if not all(data.get(field, "").strip() for field in required_fields):
-        return jsonify({"message": "Error"}), 400
+        return jsonify({"message": "faltandatos"}), 400
 
     hashed = lib.encryptPass(data["password"])
     newBusiness = {
@@ -22,19 +22,18 @@ def CreateAccount(data):
     CreateRes = queries_business.CreateBusiness(newBusiness)
     print(CreateRes)
     if CreateRes == False:
-        return jsonify({"message": "Error"}), 400
+        return jsonify({"message": "This Business is already registered"}), 400
 
     return jsonify({"message": "Business Created"}), 201
 
 
+# 🟢
 def login(data):
     required_fields = ["name", "password"]
     if not all(data.get(field, "").strip() for field in required_fields):
         return jsonify({"message": "Error"}), 400
 
     business_found = queries_business.CheckBusinessUser(data["name"])
-
-    print(business_found)
 
     # NOTE: if user not found
     if not business_found:
@@ -45,8 +44,6 @@ def login(data):
 
     # NOTE: if user found -> Check Pass
     check_pass = lib.decryptPass(data["password"], business_found["Password"])
-
-    print(check_pass)
 
     if check_pass:
         payload = business_found

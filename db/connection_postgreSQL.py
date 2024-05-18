@@ -4,7 +4,6 @@ import os
 
 load_dotenv(".env")
 
-
 try:
     connection = psycopg2.connect(
         host=os.getenv("DBHOST", "localhost"),

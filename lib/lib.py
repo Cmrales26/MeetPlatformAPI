@@ -37,8 +37,7 @@ def decodedJWT(Token):
         return False
 
 
-def TokenBusiness():
-    token = request.cookies.get("token")
+def TokenBusiness(token):
     if not token:
         return {"message": "Please Login", "Status": False}
 

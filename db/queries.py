@@ -81,7 +81,22 @@ def UpdateUser(id, data):
         return False
 
 
-def DisableUser(id):
+def ChangePassword(email, password):
+    try:
+        cursor = connection.cursor()
+        cursor.execute(
+            'UPDATE public."user" SET "Password" = %s WHERE "Email" = %s',
+            (
+                password,
+                email,
+            ),
+        )
+        connection.commit()
+        cursor.close()
+        return True
+    except Exception as ex:
+        return False
+
     try:
         cursor = connection.cursor()
         cursor.execute(

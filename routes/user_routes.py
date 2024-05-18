@@ -24,13 +24,10 @@ def editUserRoute(UserID):
     return normalUser_controller.UpdateUser(id, data)
 
 
-@user_routes.route("/disable/account/<UserID>", methods=["POST"])
-def disableUserRoute(UserID):
-    id = UserID
-    return normalUser_controller.DisableUser(id)
-
-
-# TODO: ENABLE USER
+@user_routes.route("/change/user/pass", methods=["POST"])
+def changePassRoute():
+    data = request.json
+    return normalUser_controller.ChangePass(data)
 
 
 # AUTH

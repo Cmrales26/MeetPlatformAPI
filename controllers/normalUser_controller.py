@@ -60,12 +60,12 @@ def LoginUser(data):
         token = lib.encodedJWT(payload)
         payload["token"] = token
         resp = make_response(jsonify(payload))
-        resp.set_cookie("token", token)
         return resp
     else:
         return jsonify({"message": "User Not found"}), 401
 
 
+# 🟢
 def UpdateUser(id, data):
     checkUser = queries.UserExists(id)
     if not checkUser:
@@ -89,15 +89,34 @@ def UpdateUser(id, data):
     if UpdateRes == False:
         return jsonify({"message": "Error"}), 400
 
-    return jsonify({"message": "user update successfully"}), 200
+    user_found = queries.CheckNormalUser(data["email"])
 
-
-def DisableUser(id):
-    checkUser = queries.UserExists(id)
-    if not checkUser:
+    if not user_found:
         return jsonify({"message": "User not found"}), 404
-    DisableRes = queries.DisableUser(id)
-    if DisableRes == False:
+
+    payload = user_found
+    payload.pop("Password", None)
+    token = lib.encodedJWT(payload)
+
+    return jsonify({"message": "user update successfully", "token": token}), 200
+
+
+# 🟢
+def ChangePass(data):
+    user_found = queries.CheckNormalUser(data["email"])
+    if not user_found:
+        return jsonify({"message": "User not found"}), 404
+
+    check_pass = lib.decryptPass(data["password"], user_found["Password"])
+    if not check_pass:
+        return jsonify({"message": "Incorrect password"}), 401
+
+    hashed = lib.encryptPass(data["newPassword"])
+    UpdateRes = queries.ChangePassword(
+        data["email"],
+        hashed.decode("utf-8"),
+    )
+    if not UpdateRes:
         return jsonify({"message": "Error"}), 400
 
-    return jsonify({"message": "user disable successfully"}), 200
+    return jsonify({"message": "Password change successfully"}), 200

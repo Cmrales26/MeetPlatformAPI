@@ -4,9 +4,15 @@ from lib import lib
 import uuid
 
 
+# 🟢
 def get_events():
     # Validate Token
-    TokenRes = lib.TokenBusiness()
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        return jsonify({"message": "Missing authorization header"}), 401
+
+    token = auth_header.split()[1]
+    TokenRes = lib.TokenBusiness(token)
     if not TokenRes["Status"]:
         return jsonify({"message": TokenRes["message"]}), 401
 
@@ -35,9 +41,16 @@ def get_event(id):
     return Event
 
 
+# 🟢
 def CreateEvent(data):
     # Validate Token
-    TokenRes = lib.TokenBusiness()
+    auth_header = request.headers.get("Authorization")
+
+    if not auth_header:
+        return jsonify({"message": "Missing authorization header"}), 401
+
+    token = auth_header.split()[1]
+    TokenRes = lib.TokenBusiness(token)
     if not TokenRes["Status"]:
         return jsonify({"message": TokenRes["message"]}), 401
 

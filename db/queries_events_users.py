@@ -41,7 +41,7 @@ def Get_Events():
                 "date": event[4].isoformat(),
                 "time": event[5].isoformat(),
                 "location": event[6],
-                "business_name": event[7],
+                "business_name": event[8],
             }
             event_list.append(event_dict)
         cursor.close()
@@ -72,7 +72,7 @@ def Get_Event(EventId):
                 "date": event[4].isoformat(),
                 "time": event[5].isoformat(),
                 "location": event[6],
-                "business_name": event[7],
+                "business_name": event[8],
             }
             event_list.append(event_dict)
         cursor.close()
@@ -102,7 +102,7 @@ def get_my_event(UserID):
                 "date": event[7].isoformat(),
                 "time": event[8].isoformat(),
                 "location": event[9],
-                "business_name": event[10],
+                "business_name": event[11],
             }
             event_list.append(event_dict)
         return event_list

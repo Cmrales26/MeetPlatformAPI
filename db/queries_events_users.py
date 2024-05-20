@@ -24,7 +24,7 @@ def Get_Events():
     try:
         cursor = connection.cursor()
         cursor.execute(
-            'SELECT public.event.*,public.business."Name" FROM public.event JOIN public.business ON public.event."_BusinessID" = public.business."BusinessID"'
+            'SELECT public.event.*,public.business."Name" FROM public.event JOIN public.business ON public.event."_BusinessID" = public.business."BusinessID" WHERE public.event."status" = true'
         )
         events = cursor.fetchall()
 
@@ -84,9 +84,8 @@ def Get_Event(EventId):
 def get_my_event(UserID):
     try:
         cursor = connection.cursor()
-
         cursor.execute(
-            'SELECT public.user_event.*, public.event.*, public.business."Name" FROM public.user_event JOIN public.event ON public.user_event."_EventID" = public.event."EventID" JOIN public.business ON public.event."_BusinessID" = public.business."BusinessID" WHERE public.user_event."_UserID" = %s',
+            'SELECT public.user_event.*, public.event.*, public.business."Name" FROM public.user_event JOIN public.event ON public.user_event."_EventID" = public.event."EventID" JOIN public.business ON public.event."_BusinessID" = public.business."BusinessID" WHERE public.user_event."_UserID" = %s AND public.event."status" = TRUE;',
             (UserID,),
         )
         events = cursor.fetchall()

@@ -25,6 +25,7 @@ def get_events():
     return Events
 
 
+# is not necessary to implement in this version
 def get_event(id):
     # Validate Token
     TokenRes = lib.TokenBusiness()
@@ -81,9 +82,16 @@ def CreateEvent(data):
     return jsonify({"message": "Event Created"}), 201
 
 
+# 🟢
 def editEvent(id, data):
     # Validate Token
-    TokenRes = lib.TokenBusiness()
+    auth_header = request.headers.get("Authorization")
+
+    if not auth_header:
+        return jsonify({"message": "Missing authorization header"}), 401
+
+    token = auth_header.split()[1]
+    TokenRes = lib.TokenBusiness(token)
     if not TokenRes["Status"]:
         return jsonify({"message": TokenRes["message"]}), 401
 
@@ -120,8 +128,16 @@ def editEvent(id, data):
     return jsonify({"message": "Update Success"}), 200
 
 
+# 🟢
 def delete_event(id):
-    TokenRes = lib.TokenBusiness()
+    # Validate Token
+    auth_header = request.headers.get("Authorization")
+
+    if not auth_header:
+        return jsonify({"message": "Missing authorization header"}), 401
+
+    token = auth_header.split()[1]
+    TokenRes = lib.TokenBusiness(token)
     if not TokenRes["Status"]:
         return jsonify({"message": TokenRes["message"]}), 401
 
@@ -139,3 +155,30 @@ def delete_event(id):
         return jsonify({"message": "Error in DB"}), 400
 
     return jsonify({"message": "Delete"}), 200
+
+
+# 🟢
+def reactivate_event(id):
+    # Validate Token
+    auth_header = request.headers.get("Authorization")
+
+    if not auth_header:
+        return jsonify({"message": "Missing authorization header"}), 401
+    token = auth_header.split()[1]
+    TokenRes = lib.TokenBusiness(token)
+    if not TokenRes["Status"]:
+        return jsonify({"message": TokenRes["message"]}), 401
+
+    # Validate Event and Event Creator
+    BusinessId = TokenRes["Business"]["BusinessID"]
+    CanReactivate = queries_events.validate_event_permission(BusinessId, id)
+
+    if not CanReactivate:
+        return jsonify({"message": "You can't reactivate this event"}), 401
+
+    ReactivateRES = queries_events.reactivate_event(id)
+
+    if not ReactivateRES:
+        return jsonify({"message": "Error in DB"}), 400
+
+    return jsonify({"message": "Reactivate"}), 200

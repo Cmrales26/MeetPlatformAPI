@@ -28,6 +28,12 @@ def DeleteEventRoute(EventID):
     return events_Controller.delete_event(id)
 
 
+@event_routes.route("/reactivate/event/<EventID>", methods=["PATCH"])
+def ReactivateEventRoute(EventID):
+    id = EventID
+    return events_Controller.reactivate_event(id)
+
+
 @event_routes.route("/Business/my/event/<EventID>", methods=["GET"])
 def GetEventRoute(EventID):
     id = EventID

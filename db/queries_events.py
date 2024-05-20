@@ -27,6 +27,7 @@ def Get_Event(BusinessID):
                 "date": event[4].isoformat(),
                 "time": event[5].isoformat(),
                 "location": event[6],
+                "status": event[7],
             }
             event_list.append(event_dict)
         cursor.close()
@@ -127,13 +128,28 @@ def delete_event(EventId):
     try:
         cursor = connection.cursor()
         cursor.execute(
-            'DELETE FROM public.event WHERE "EventID" = %s',
+            'UPDATE public.event SET "status" = FALSE WHERE "EventID" = %s',
             (EventId,),
         )
         connection.commit()
         cursor.close()
         return True
     except Exception as ex:
+        return False
+
+
+def reactivate_event(EventId):
+    try:
+        cursor = connection.cursor()
+        cursor.execute(
+            'UPDATE public.event SET "status" = TRUE WHERE "EventID" = %s',
+            (EventId,),
+        )
+        connection.commit()
+        cursor.close()
+        return True
+    except Exception as ex:
+        print(ex)
         return False
 
 

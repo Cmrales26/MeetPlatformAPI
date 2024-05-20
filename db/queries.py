@@ -96,15 +96,3 @@ def ChangePassword(email, password):
         return True
     except Exception as ex:
         return False
-
-    try:
-        cursor = connection.cursor()
-        cursor.execute(
-            'UPDATE public."user" SET "Status" = False WHERE "UserID" = %s',
-            (id,),
-        )
-        connection.commit()
-        connection.close()
-        return True
-    except:
-        return False

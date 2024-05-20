@@ -58,12 +58,28 @@ def CheckBusinessUser(name):
 
 
 def UpdateBusiness(data, id):
-    print(data)
     try:
         cursor = connection.cursor()
         cursor.execute(
             'UPDATE public.business SET "Bio" = %s, "FundationDate" = %s WHERE "BusinessID" = %s',
             (data["bio"], data["fundationdate"], id),
+        )
+        connection.commit()
+        cursor.close()
+        return True
+    except Exception as ex:
+        return False
+
+
+def ChangePasswordB(name, password):
+    try:
+        cursor = connection.cursor()
+        cursor.execute(
+            'UPDATE public."business" SET "Password" = %s WHERE "Name" = %s',
+            (
+                password,
+                name,
+            ),
         )
         connection.commit()
         cursor.close()

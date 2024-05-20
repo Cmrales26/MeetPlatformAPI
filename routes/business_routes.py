@@ -29,4 +29,10 @@ def disableBusinessRoute(BusinessID):
     return BusinessUser_controller.DisableBusiness(id)
 
 
+@business_routes.route("/change/pass/business", methods=["POST"])
+def changeBusinessPass():
+    data = request.json
+    return BusinessUser_controller.ChangePassB(data)
+
+
 # TODO: Enable Business

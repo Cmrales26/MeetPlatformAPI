@@ -101,6 +101,7 @@ def DisableBusiness(id):
     return jsonify({"message": "Business disable successfully"}), 200
 
 
+# 🟢
 def ChangePassB(data):
     Business_Found = queries_business.CheckBusinessUser(data["name"])
     # print(Business_Found)
